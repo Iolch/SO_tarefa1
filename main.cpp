@@ -2,6 +2,7 @@
 #include <ctime>
 #include <chrono>
 #include <unistd.h>
+#include <stdlib.h>
 
 int main(){
 
@@ -24,7 +25,7 @@ int main(){
     if(pid[0]<0){
         time_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
         std::cout << "error creating first child process"<< std::endl;
-        return 1;
+        exit (-1);
     }
 
     if(pid[0] > 0){ /* if it is the father */
@@ -35,7 +36,7 @@ int main(){
 
         if(pid[1]<0){
             std::cout << "error creating second child process" << std::endl;
-            return 1;
+            exit (-1);
         }
 
         if(pid[1]>0){ /* if it is the father */
@@ -45,7 +46,7 @@ int main(){
             time_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
             std::cout << "father died at " << std::ctime(&time_time) << std::endl;
 
-            return 0;
+            exit (0);
         }
 
         if(pid[1] == 0){ /* if it is the second son */
@@ -59,7 +60,7 @@ int main(){
 
             if(pid[3]<0){
                 std::cout << "error creating second grandson process" << std::endl;
-                return 1;
+                exit (-1);
             }
 
             if(pid[3]>0){ /* if it is the second son */
@@ -69,7 +70,7 @@ int main(){
                 time_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
                 std::cout << "second son died at " << std::ctime(&time_time) << std::endl;
 
-                return 0;
+                exit (0);
             }
             if(pid[3]==0){ /* if it is the second grandson */
 
@@ -81,7 +82,7 @@ int main(){
                 time_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
                 std::cout << "second grandson died at " << std::ctime(&time_time) << std::endl;
 
-                return 0;
+                exit (0);
             }
         }
     }
@@ -105,7 +106,7 @@ int main(){
             time_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
             std::cout << "first son died at " << std::ctime(&time_time) << std::endl;
 
-            return 0;
+            exit (0);
         }
         if(pid[2]==0){ /* if it is the first grandson */
 
@@ -117,8 +118,7 @@ int main(){
             time_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
             std::cout << "first grandson died at " << std::ctime(&time_time) << std::endl;
 
-            return 0;
+            exit (0);
         }
     }
-    return 0;
 }
