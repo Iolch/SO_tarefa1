@@ -14,18 +14,17 @@ int main(){
      */
     pid_t pid[4] = {-1, -1, -1, -1};
     std::time_t births[5];
-    std::time_t time_time;
+    std::time_t current_time;
 
-    time_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    births[0] = time_time;
-    std::cout << "Father was born at "  << std::ctime(&time_time) << std::endl;
+    births[0] = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    std::cout << "Father was born at "  << std::ctime(&births[0]) << std::endl;
 
     sleep(14); // pai tem 14 anos, entao tem o primeiro filho
     
     pid[0] = fork(); // pai tendo o primeiro filho
     
     if(pid[0]<0){
-        time_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+        current_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
         std::cout << "error creating first child process"<< std::endl;
         exit (-1);
     }
@@ -45,17 +44,16 @@ int main(){
 
             sleep(44); // o pai tem 14+2+44=60 anos entao morre
 
-            time_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-            std::cout << "Father was born at " << std::ctime(&births[0]) <<"and died at " << std::ctime(&time_time) << "They lived for " << difftime(time_time, births[0]) << " seconds."<< std::endl << std::endl;
+            current_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+            std::cout << "Father was born at " << std::ctime(&births[0]) <<"and died at " << std::ctime(&current_time) << "They lived for " << difftime(current_time, births[0]) << " seconds."<< std::endl << std::endl;
 
             exit (0);
         }
 
         if(pid[1] == 0){ /* if it is the second son */
 
-            time_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-            births[2] = time_time;
-            std::cout << "Second son was born at " << std::ctime(&time_time) << std::endl;
+            births[2] = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+            std::cout << "Second son was born at " << std::ctime(&births[2]) << std::endl;
 
             sleep(14); // o pai tem 14+2+14=30 anos, entao tem o segundo neto. o segundo filho tem 14 anos
 
@@ -70,20 +68,19 @@ int main(){
 
                 sleep(16); // o segundo filho tem 14+16=30 anos, entao morre
 
-                time_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-                std::cout << "Second son was born at " << std::ctime(&births[2]) << "and died at " << std::ctime(&time_time) << "They lived for " << difftime(time_time, births[2]) << " seconds."<< std::endl << std::endl;
+                current_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+                std::cout << "Second son was born at " << std::ctime(&births[2]) << "and died at " << std::ctime(&current_time) << "They lived for " << difftime(current_time, births[2]) << " seconds."<< std::endl << std::endl;
                 exit (0);
             }
             if(pid[3]==0){ /* if it is the second grandson */
 
-                time_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-                births[4] = time_time;
-                std::cout << "Second grandson was born at " << std::ctime(&time_time) << std::endl;
+                births[4] = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+                std::cout << "Second grandson was born at " << std::ctime(&births[4]) << std::endl;
 
                 sleep(18); // o segundo neto tem 18 anos, entao morre
 
-                time_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-                std::cout << "Second grandson was born at "<< std::ctime(&births[4]) <<"and died at " << std::ctime(&time_time) << "They lived for " << difftime(time_time, births[4]) << " seconds."<< std::endl << std::endl;
+                current_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+                std::cout << "Second grandson was born at "<< std::ctime(&births[4]) <<"and died at " << std::ctime(&current_time) << "They lived for " << difftime(current_time, births[4]) << " seconds."<< std::endl << std::endl;
 
                 exit (0);
             }
@@ -91,9 +88,8 @@ int main(){
     }
     if(pid[0] == 0){ /* if it is the first son */
 
-        time_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-        births[1] = time_time;
-        std::cout << "First son was born at " << std::ctime(&time_time) << std::endl;
+        births[1] = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+        std::cout << "First son was born at " << std::ctime(&births[1]) << std::endl;
 
         sleep(12); // o pai tem 14+12=26 anos, entao tem o primeiro neto. o primeiro filho tem 12 anos
 
@@ -107,21 +103,20 @@ int main(){
 
             sleep(18); // o segundo filho tem 12+18=30 anos, entao morre
 
-            time_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-            std::cout << "First son was born at "<< std::ctime(&births[1]) << "and died at " << std::ctime(&time_time) <<"They lived for " << difftime(time_time, births[1]) << " seconds."<< std::endl << std::endl;
+            current_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+            std::cout << "First son was born at "<< std::ctime(&births[1]) << "and died at " << std::ctime(&current_time) <<"They lived for " << difftime(current_time, births[1]) << " seconds."<< std::endl << std::endl;
 
             exit (0);
         }
         if(pid[2]==0){ /* if it is the first grandson */
 
-            time_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-            births[3] = time_time;
-            std::cout << "First grandson was born at " << std::ctime(&time_time) << std::endl;
+            births[3] = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+            std::cout << "First grandson was born at " << std::ctime(&births[3]) << std::endl;
 
             sleep(12); // o primeiro neto tem 12 anos, entao morre
 
-            time_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-            std::cout << "First grandson was born at "<< std::ctime(&births[3]) << "and died at " << std::ctime(&time_time) << "They lived for " << difftime(time_time, births[3]) << " seconds."<< std::endl << std::endl;
+            current_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+            std::cout << "First grandson was born at "<< std::ctime(&births[3]) << "and died at " << std::ctime(&current_time) << "They lived for " << difftime(current_time, births[3]) << " seconds."<< std::endl << std::endl;
 
 
             exit (0);
