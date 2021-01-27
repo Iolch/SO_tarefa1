@@ -22,3 +22,5 @@ O código foi implementado com a linguagem C++. Para compilar e executar em qual
 ```sh
 $ g++ -Wall -std=c++14 main.cpp -o main && ./main
 ```
+
+Os testes foram realizados utilizando a versão 7.5.0 e 9.3.0 do compilador.
