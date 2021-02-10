@@ -10,7 +10,7 @@
 #define t 4                 // Número de threads a ser criadas
 #define n 8                 // Número de trapézios
 #define a 0.0               // Limite inferior
-#define b 2.0               // Limite superior
+#define b 10.0              // Limite superior
 int q[t];                   // Quantidade de trapézios em cada thread
 float r[t];                 // Resultado de área de cada thread
 float h = (b - a)/n;        // Largura de cada trapézio
