@@ -7,44 +7,60 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-float a = 0.0;              // Limite inferior
-float b = 2.0;              // Limite superior
-float h;                    // Largura de cada trapézio
-int t;                      // Número de threads a ser criadas
-int n;                      // Número de trapézios
+#define t 4                 // Número de threads a ser criadas
+#define n 8                 // Número de trapézios
+#define a 0.0               // Limite inferior
+#define b 2.0               // Limite superior
+int q[t];                   // Quantidade de trapézios em cada thread
+float r[t];                 // Resultado de área de cada thread
+float h = (b - a)/n;        // Largura de cada trapézio
+float total;                // Área Total
+pthread_t threads[t];       
+void *thread_return;
+int status;
 
+
+// Retorna quantidade total de trapézios até o inicio da posição i
+int sumT(int i){
+    int total = 0;
+    for(int j = 0; j < i; j++) total = total + q[i];
+    return total;
+}
+
+// Retorna 1 quando i é inteiro e 0 quando não
+int isInt(void * i){
+    return 1;   //fazer
+}
+
+// Função f definida
+float f(float x){
+    return 5.0;
+}
 
 void * calculateArea(void * i){
-//     if((int)(size_t)i > 0){
-//         pthread_join(threads[(int)(size_t)i-1], &thread_return); 
-//         printf("Esta é a thread %d. A thread %d terminou \n", (int)(size_t) i, (int)(size_t) i-1);
-//     }else{
-//         printf("Sou a primeira thread \n");
-//     }
-//     soma = soma + 1;
-//     printf("sou %d a soma deu %d \n",(int)(size_t) i, soma);
-//     sleep(1);
-//     pthread_exit(NULL); //finaliza execução da thread
+    float localA = a + sumT((int)(size_t)i) * h;   
+    float localB = q[(int)(size_t) i] * h + localA;  // b = q[i] * h + a
+    float totalArea = 0;
+
+    // Para cada trapézio, vamos calcular o h/2 *(f(limite inferior) + f(limite superior))
+    for(int j = 0; j < q[(int)(size_t) i]; j++){
+        float bottom = localA + j*h;    // Limite inferior
+        float top = bottom + h;         // Limite superior
+
+        totalArea = totalArea + h/2 * (f(bottom) + f(top));
+    }
+
+    // Agora que temos a área total dos trapézios dessa thread, 
+    // adicionaremos no array de resultados
+    r[(int)(size_t)i] = totalArea;
+
+    pthread_exit(NULL); //finaliza execução da thread
 }
 
-int isInt(void * i){
-    return 1;
-}
+
 
 int main(int argc, char * argv[]){
-    
-    t = (int)(size_t) argv[1];  // Número de threads a ser criadas
-    n = (int)(size_t) argv[2];  // Número de trapézios
-    h = (b - a)/n;              // Largura de cada trapézio
-
-    // Esses caras vão ficar na memória compartilhada
-    int q[t];                   // Quantidade de trapézios em cada thread
-    float r[t];                 // Resultado de cada thread
-    pthread_t threads[t];
-    void *thread_return;
-    int status;
-    //-----------------------------------------------
-    
+        
 
     // if(!isInt((void *)(size_t)(n/t))){
     if(0){
@@ -55,30 +71,33 @@ int main(int argc, char * argv[]){
     }
 
 
-    for (int i=0; i < n; i++){
+    for (int i=0; i < t; i++){
         // cada thread i terá q[i] trapézios, assim, a distância entre o 'a' e o 'b'
         // local será a = x e b = q[i] * h + x
         printf("Processo principal criando thread %d\n", i);
         status = pthread_create(&threads[i], NULL, calculateArea, (void *)(size_t) i);
 
+        if(status != 0){
+            printf("Erro na criação da thread. Codigo de Erro: %d\n", status);
+            return 1;
+        }
+
     }
 
-    // for (i = 0; i < n; i ++){
-    //     printf("Processo principal criando thread %d\n", i);
-    //     status = pthread_create(&threads[i], NULL, sum, (void *)(size_t) i); //criando a tread
+    // Esperar todas as threads finalizarem
+    for (int i=0; i < t; i++){
+        printf("Esperando thread %d finalizar... \n", i);
+        pthread_join(threads[i], &thread_return); 
+        printf("Thread %d finalizada\n", i);
+    }
 
-    //     if(status != 0){
-    //         printf("Erro na criação da thread. Codigo de Erro: %d\n", status);
-    //         return 1;
-    //     }
-    // }
+    // Somar as áreas totais de cada thread
+    for(int i=0; i < t; i++){
+        total = total + r[i];
+    }
 
-    // printf("Esperando thread %d finalizar... \n", i-1);
-    // pthread_join(threads[i-1], &thread_return); 
-    // printf("Thread %d finalizada\n", i-1);
+    printf("Processo pai finalizou e a área total é %f\n", total);
 
-    // printf("Processo pai finalizar e soma é %d\n", soma);
-
-    // return 0;
+    return 0;
 
 }
