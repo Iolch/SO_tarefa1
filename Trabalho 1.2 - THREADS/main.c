@@ -9,7 +9,7 @@
 #include <assert.h>
 
 #define t 4                 // Número de threads a ser criadas
-#define n 8                 // Número de trapézios
+#define n 10                 // Número de trapézios
 #define a 0.0               // Limite inferior
 #define b 10.0              // Limite superior
 int q[t];                   // Quantidade de trapézios em cada thread
@@ -26,11 +26,6 @@ int sumT(int i){
     int total = 0;
     for(int j = 0; j < i; j++) total = total + q[i];
     return total;
-}
-
-// Retorna 1 quando i é inteiro e 0 quando não
-int isInt(void * i){
-    return 1;   //fazer
 }
 
 // Função f definida
@@ -64,20 +59,21 @@ int getMDC(int num1, int num2) {
 
     int resto;
 
-    while (resto != 0){
-        resto = num1 % num2;
+    do {                        //Estranho que se mudar pra while(){} normal ele para de funcionar
+        resto = num1 % num2;    //ver com bruninha se ela entende
 
         num1 = num2;
         num2 = resto;
-    };
+
+    } while (resto != 0);
 
     return num1;
 }
 
-int main(int argc, char * argv[]){
-        
-    
-    if(isInt((void *)(size_t)(n/t))){
+int main(int argc, char * argv[]){   
+   
+    if(0 == n%t){
+         // Se n/t for inteiro
         for(int i=0; i < t; i++) q[i] = n/t; // Completa o array q com o valor n/t
     }else{
         // Caso o número de trapézios por thread seja decimal, 
