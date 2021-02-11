@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #define t 4                 // Número de threads a ser criadas
 #define n 8                 // Número de trapézios
@@ -57,17 +58,42 @@ void * calculateArea(void * i){
     pthread_exit(NULL); //finaliza execução da thread
 }
 
+// Função que retorna o máximo divisor comum entre dois números
+// Retirada daqui http://devfuria.com.br/logica-de-programacao/mdc/
+int getMDC(int num1, int num2) {
 
+    int resto;
+
+    while (resto != 0){
+        resto = num1 % num2;
+
+        num1 = num2;
+        num2 = resto;
+    };
+
+    return num1;
+}
 
 int main(int argc, char * argv[]){
         
-
-    // if(!isInt((void *)(size_t)(n/t))){
-    if(0){
+    
+    if(isInt((void *)(size_t)(n/t))){
+        for(int i=0; i < t; i++) q[i] = n/t; // Completa o array q com o valor n/t
+    }else{
         // Caso o número de trapézios por thread seja decimal, 
         // teremos que mudar a distribuição de trapezios.
-    }else{
-        for(int i=0; i < t; i++) q[i] = n/t; // Completa o array q com o valor n/t
+        int p = getMDC(n,t);
+        for(int i=0; i < t; i++) {
+            if(i != t-1){
+                q[i] = p;               // Cada thread irá calcular a área de getMDC(t,n) trapézios
+            }else{
+                q[i] = n - i * p;       // Caso seja a ultima thread, fica com todo mundo que não "coube" nas outras threads
+            }
+        };
+        // EXEMPLO: para t = 4 e n = 10
+        // q[0]=2; q[1]=2; q[2]=2; q[3] = 4;
+        // Ou seja, divide o mais igual possível, 
+        // e joga o resto na ultima thread        
     }
 
 
