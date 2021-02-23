@@ -15,13 +15,6 @@ typedef struct {
 
 float h;
 
-// Retorna quantidade total de trapézios até o inicio da posição i
-int sumT(int i){
-    int total = 0;
-    for(int j = 0; j < i; j++) total = total + i;
-    return total;
-}
-
 float f(float x){
     return 5.0;
 }
@@ -30,7 +23,7 @@ void * calculateArea(void * arg){
 
     ThreadValues *value = (ThreadValues *)arg;
 
-    float localA = a + sumT(value->num_trapezoids) * h;
+    float localA = a + value->id * h * 20;
     float localB = value->num_trapezoids * h + localA;
     float totalArea = 0;
 

@@ -16,12 +16,6 @@ typedef struct {
 
 float h;
 
-int sumT(int i){
-    int total = 0;
-    for(int j = 0; j < i; j++) total = total + i;
-    return total;
-}
-
 float f(float x){
     return sin(2.0*x)+cos(5.0*x);
 }
@@ -30,7 +24,7 @@ void * calculateArea(void * arg){
 
     ThreadValues *value = (ThreadValues *)arg;
 
-    float localA = a + sumT(value->num_trapezoids) * h;
+    float localA = a + value->id * h * 20;
     float localB = value->num_trapezoids * h + localA;
     float totalArea = 0;
 
