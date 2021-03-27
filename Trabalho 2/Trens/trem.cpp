@@ -2,14 +2,18 @@
 #include <QtCore>
 
 //Construtor
-Trem::Trem(int ID, int x, int y, int velocidade){
+Trem::Trem(int ID, int x, int y, int velocidade, int maxVelocidade){
     this->ID = ID;
     this->x = x;
     this->y = y;
     this->velocidade = velocidade;
+    this->maxVelocidade = maxVelocidade;
 }
 void Trem::setVelocidade(int velocidade){
     this->velocidade = velocidade;
+}
+int Trem::getMaxVelocidade(){
+    return this->maxVelocidade;
 }
 //Função a ser executada após executar trem->START
 void Trem::run(){
