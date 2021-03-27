@@ -83,6 +83,21 @@ void MainWindow::on_pushButton_2_clicked()
 
 void MainWindow::on_slider1_sliderMoved(int position)
 {
-    printf("Muda velocidade %d\n", position);
     trem1->setVelocidade(position);
+}
+void MainWindow::on_slider2_sliderMoved(int position)
+{
+    trem2->setVelocidade(position);
+}
+void MainWindow::on_slider3_sliderMoved(int position)
+{
+    trem3->setVelocidade(position);
+}
+void MainWindow::on_slider4_sliderMoved(int position)
+{
+    trem4->setVelocidade(position);
+}
+void MainWindow::on_slider5_sliderMoved(int position)
+{
+    trem5->setVelocidade(position);
 }
