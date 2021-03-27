@@ -8,6 +8,12 @@
 #define ENTRANDO 2      // Estado quando o trem quer entrar em uma regiao critica
 #define CCIRCULANDO 3   // Estado quando o trem está circulando uma região critica
 
+#define AZUL 0
+#define VERMELHO 1
+#define VERDE 2
+#define ROXO 3
+#define LARANJA 4
+
 #define N 7     // 7 regiões criticas
 #define Q 5     // 5 trens
 
@@ -34,7 +40,7 @@ int Trem::move(int a, int b){
     // Tenta se mover, só consegue se mover não vá entrar em uma região critica em que está ocupada.
     // a e b representam as coordenadas x e y.
 
-    if(a == 330 && (b>=30 && b<=150)){
+    if(a == 330 && (b>=30 && b<=150-27)){
         // Regiao Critica 1
         return 1;
     }
@@ -67,6 +73,25 @@ int Trem::move(int a, int b){
 }
 
 void lockUnlockRoads(int i, int rcritica){
+
+    if(i == AZUL){
+        while(rcritica == 1 && regiao[ROXO] == 3 && regiao[VERMELHO] == 4);
+    }
+    if(i == VERMELHO){
+        while(rcritica == 4 && regiao[ROXO] == 3);
+    }
+    if(i == VERDE){
+        while(rcritica == 6 && regiao[LARANJA] == 5);
+        while(rcritica == 2 && regiao[LARANJA] == 5 && regiao[2] == 6);
+    }
+    if(i == ROXO){
+        while(rcritica == 3 && regiao[VERMELHO] == 4);
+    }
+    if(i == LARANJA){
+        while(rcritica == 5 && regiao[VERDE] == 6 && regiao[VERMELHO] == 2);
+        while(rcritica == 7 && regiao[VERMELHO] == 5 && regiao[ROXO] == 4);
+    }
+
     if(rcritica != -1) {
         if((estado[i] == CCIRCULANDO && regiao[i] != rcritica) || estado[i] == CIRCULANDO){ // Caso o trem esteja entrando uma nova rcritica
 
