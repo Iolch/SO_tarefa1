@@ -13,9 +13,9 @@
 class Trem: public QThread{
  Q_OBJECT
 public:
-    Trem(int,int,int);  //construtor
+    Trem(int,int,int,int);  //construtor
     void run();         //função a ser executada pela thread
-
+    void setVelocidade(int);
 
 //Cria um sinal
 signals:

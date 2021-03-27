@@ -8,11 +8,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     //Cria o trem com seu (ID, posição X, posição Y)
-    trem1 = new Trem(1,60,30);
-    trem2 = new Trem(2,330,30);
-    trem3 = new Trem(3,600,30);
-    trem4 = new Trem(4,200,150);
-    trem5 = new Trem(5,470,150);
+    trem1 = new Trem(1,60,30,ui->slider1->value());
+    trem2 = new Trem(2,330,30,ui->slider2->value());
+    trem3 = new Trem(3,600,30,ui->slider3->value());
+    trem4 = new Trem(4,200,150,ui->slider4->value());
+    trem5 = new Trem(5,470,150,ui->slider5->value());
 
     /*
      * Conecta o sinal UPDATEGUI à função UPDATEINTERFACE.
@@ -78,4 +78,11 @@ void MainWindow::on_pushButton_2_clicked()
     trem3->terminate();
     trem4->terminate();
     trem5->terminate();
+}
+
+
+void MainWindow::on_slider1_sliderMoved(int position)
+{
+    printf("Muda velocidade %d\n", position);
+    trem1->setVelocidade(position);
 }

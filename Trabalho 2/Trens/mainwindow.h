@@ -25,6 +25,8 @@ private slots:
 
     void on_pushButton_2_clicked();
 
+    void on_slider1_sliderMoved(int position);
+
 private:
     Ui::MainWindow *ui;
 
