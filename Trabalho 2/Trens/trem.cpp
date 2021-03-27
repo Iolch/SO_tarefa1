@@ -1,6 +1,7 @@
 #include "trem.h"
 #include <QtCore>
 #include <QSemaphore>
+#include <QPair>
 
 #define PARADO 0        // Estado quando o trem está parado
 #define CIRCULANDO 1    // Estado quando o trem está circulando
@@ -32,77 +33,82 @@ int Trem::getMaxVelocidade(){
 void Trem::move(int a, int b){
     // Tenta se mover, só consegue se mover não vá entrar em uma região critica em que está ocupada.
     // a e b representam as coordenadas x e y.
+
     if(a == 330 && (b>=30 && b<=167)){
         // Regiao Critica 1
-        if((estado[ID] == CCIRCULANDO && regiao[ID] != 1) || estado[ID] == CIRCULANDO){
-            //Vê se pode entrar na regiao critica
+        if((estado[ID-1] == CCIRCULANDO && regiao[ID-1] != 1) || estado[ID-1] == CIRCULANDO){
+            //Vai entrar na regiao critica
             printf("O trem %d vai entrar na regiao 1\n", ID);
         }
     }
     if(a == 600 && (b>=30 && b<=167)){
         // Regiao Critica 2
-        if((estado[ID] == CCIRCULANDO && regiao[ID] != 2) || estado[ID] == CIRCULANDO){
-            //Vê se pode entrar na regiao critica
+        if((estado[ID-1] == CCIRCULANDO && regiao[ID-1] != 2) || estado[ID-1] == CIRCULANDO){
+            //Vai entrar na regiao critica
             printf("O trem %d vai entrar na regiao 2\n", ID);
+
         }
     }
     if((a>=200 && a<=351) && b==80){
         // Regiao Critica 3
-        if((estado[ID] == CCIRCULANDO && regiao[ID] != 3) || estado[ID] == CIRCULANDO){
-            //Vê se pode entrar na regiao critica
+        if((estado[ID-1] == CCIRCULANDO && regiao[ID-1] != 3) || estado[ID-1] == CIRCULANDO){
+            //Vai entrar na regiao critica
             printf("O trem %d vai entrar na regiao 3\n", ID);
         }
     }
     if((a>=330 && a<=491) && b==80){
         // Regiao Critica 4
-        if((estado[ID] == CCIRCULANDO && regiao[ID] != 4) || estado[ID] == CIRCULANDO){
-            //Vê se pode entrar na regiao critica
+        if((estado[ID-1] == CCIRCULANDO && regiao[ID-1] != 4) || estado[ID-1] == CIRCULANDO){
+            //Vai entrar na regiao critica
             printf("O trem %d vai entrar na regiao 4\n", ID);
+
         }
     }
     if((a>=470 && a<=621) && b==80){
         // Regiao Critica 5
-        if((estado[ID] == CCIRCULANDO && regiao[ID] != 5) || estado[ID] == CIRCULANDO){
+        if((estado[ID-1] == CCIRCULANDO && regiao[ID-1] != 5) || estado[ID-1] == CIRCULANDO){
             //Vê se pode entrar na regiao critica
             printf("O trem %d vai entrar na regiao 5\n", ID);
         }
     }
     if((a>=600 && a<=761) && b==80){
         // Regiao Critica 6
-        if((estado[ID] == CCIRCULANDO && regiao[ID] != 6) || estado[ID] == CIRCULANDO){
-            //Vê se pode entrar na regiao critica
+        if((estado[ID-1] == CCIRCULANDO && regiao[ID-1] != 6) || estado[ID-1] == CIRCULANDO){
+            //Vai entrar na regiao critica
             printf("O trem %d vai entrar na regiao 6\n", ID);
         }
     }
     if(a == 470 && (b>=150 && b<=287)){
         // Regiao Critica 7
-        if((estado[ID] == CCIRCULANDO && regiao[ID] != 7) || estado[ID] == CIRCULANDO){
-            //Vê se pode entrar na regiao critica
+        if((estado[ID-1] == CCIRCULANDO && regiao[ID-1] != 7) || estado[ID-1] == CIRCULANDO){
+            //Vai entrar na regiao critica
             printf("O trem %d vai entrar na regiao 7\n", ID);
+
+
         }
     }
+
 }
 //Função a ser executada após executar trem->START
 void Trem::run(){
     while(true){
-        // Checa se o trem vai entrar em uma região critica
-
         switch(ID){
         case 1:     //Trem 1
             if (y == 30 && x <330){
-                move(x+10, y);
+                move(x+10, y);  // Checa se o trem vai entrar em uma região critica
+
                 x+=10;
             }
             else if (x == 330 && y < 150){
-                move(x, y+10);
+                move(x, y+10);  // Checa se o trem vai entrar em uma região critica
                 y+=10;
             }
             else if (x > 60 && y == 150){
-                move(x-10, y);
+                move(x-10, y);  // Checa se o trem vai entrar em uma região critica
                 x-=10;
             }
             else{
-                move(x, y-10);
+                move(x, y-10);  // Checa se o trem vai entrar em uma região critica
                 y-=10;
             }
             emit updateGUI(ID, x,y);    //Emite um sinal
