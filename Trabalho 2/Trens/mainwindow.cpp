@@ -8,11 +8,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     //Cria o trem com seu (ID, posição X, posição Y)
-    trem1 = new Trem(1,60,30);
-    trem2 = new Trem(2,330,30);
-    trem3 = new Trem(3,600,30);
-    trem4 = new Trem(4,200,150);
-    trem5 = new Trem(5,470,150);
+    trem1 = new Trem(1,60,90,(ui->slider1->maximum() - ui->slider1->value()), ui->slider1->maximum());
+    trem2 = new Trem(2,460,30,(ui->slider2->maximum() - ui->slider2->value()), ui->slider2->maximum());
+    trem3 = new Trem(3,870,90,(ui->slider3->maximum() - ui->slider3->value()), ui->slider3->maximum());
+    trem4 = new Trem(4,330,270,(ui->slider4->maximum() - ui->slider4->value()), ui->slider4->maximum());
+    trem5 = new Trem(5,600,270,(ui->slider5->maximum() - ui->slider5->value()), ui->slider5->maximum());
 
     /*
      * Conecta o sinal UPDATEGUI à função UPDATEINTERFACE.
@@ -78,4 +78,31 @@ void MainWindow::on_pushButton_2_clicked()
     trem3->terminate();
     trem4->terminate();
     trem5->terminate();
+}
+
+
+void MainWindow::on_slider1_sliderMoved(int position)
+{
+    int max = trem1->getMaxVelocidade();
+    trem1->setVelocidade(max-position);
+}
+void MainWindow::on_slider2_sliderMoved(int position)
+{
+    int max = trem2->getMaxVelocidade();
+    trem2->setVelocidade(max - position);
+}
+void MainWindow::on_slider3_sliderMoved(int position)
+{
+    int max = trem3->getMaxVelocidade();
+    trem3->setVelocidade(max - position);
+}
+void MainWindow::on_slider4_sliderMoved(int position)
+{
+    int max = trem4->getMaxVelocidade();
+    trem4->setVelocidade(max - position);
+}
+void MainWindow::on_slider5_sliderMoved(int position)
+{
+    int max = trem5->getMaxVelocidade();
+    trem5->setVelocidade(max - position);
 }
