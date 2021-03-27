@@ -16,7 +16,8 @@ class Trem: public QThread{
 public:
     Trem(int,int,int,int,int);  //construtor
     void run();         //função a ser executada pela thread
-    int move(int, int);        //o trem checa se pode se mover
+    int move(int, int, int);        //o trem checa se pode se mover
+    int moveOut(int, int, int);        //o trem checa se pode se mover
     void setVelocidade(int);
     int getMaxVelocidade();
 
