@@ -71,7 +71,7 @@ public:
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         label_trem1 = new QLabel(centralWidget);
         label_trem1->setObjectName(QString::fromUtf8("label_trem1"));
-        label_trem1->setGeometry(QRect(60, 30, 21, 17));
+        label_trem1->setGeometry(QRect(60, 90, 21, 17));
         label_trem1->setStyleSheet(QString::fromUtf8("QLabel { background: red}"));
         label_trilho1 = new QLabel(centralWidget);
         label_trilho1->setObjectName(QString::fromUtf8("label_trilho1"));
@@ -109,11 +109,11 @@ public:
         label_trilho2_2->setStyleSheet(QString::fromUtf8("QLabel { background: yellow}"));
         label_trem2 = new QLabel(centralWidget);
         label_trem2->setObjectName(QString::fromUtf8("label_trem2"));
-        label_trem2->setGeometry(QRect(330, 30, 21, 17));
+        label_trem2->setGeometry(QRect(460, 30, 21, 17));
         label_trem2->setStyleSheet(QString::fromUtf8("QLabel { background: red}"));
         label_trem3 = new QLabel(centralWidget);
         label_trem3->setObjectName(QString::fromUtf8("label_trem3"));
-        label_trem3->setGeometry(QRect(600, 30, 21, 17));
+        label_trem3->setGeometry(QRect(870, 90, 21, 17));
         label_trem3->setStyleSheet(QString::fromUtf8("QLabel { background: red}"));
         label_trilho1_3 = new QLabel(centralWidget);
         label_trilho1_3->setObjectName(QString::fromUtf8("label_trilho1_3"));
@@ -149,11 +149,11 @@ public:
         label_trilho3_4->setStyleSheet(QString::fromUtf8("QLabel { background: yellow}"));
         label_trem4 = new QLabel(centralWidget);
         label_trem4->setObjectName(QString::fromUtf8("label_trem4"));
-        label_trem4->setGeometry(QRect(200, 150, 21, 17));
+        label_trem4->setGeometry(QRect(330, 270, 21, 17));
         label_trem4->setStyleSheet(QString::fromUtf8("QLabel { background: red}"));
         label_trem5 = new QLabel(centralWidget);
         label_trem5->setObjectName(QString::fromUtf8("label_trem5"));
-        label_trem5->setGeometry(QRect(470, 150, 21, 17));
+        label_trem5->setGeometry(QRect(600, 270, 21, 17));
         label_trem5->setStyleSheet(QString::fromUtf8("QLabel { background: red}"));
         slider1 = new QSlider(centralWidget);
         slider1->setObjectName(QString::fromUtf8("slider1"));
