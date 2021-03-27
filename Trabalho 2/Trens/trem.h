@@ -1,6 +1,6 @@
 #ifndef TREM_H
 #define TREM_H
-
+#include "semaphore.h"
 #include <QThread>
 
 /*
@@ -13,10 +13,13 @@
 class Trem: public QThread{
  Q_OBJECT
 public:
-    Trem(int,int,int,int,int);  //construtor
+    Trem(int,int,int,int,int,sem_t*,sem_t*, int *);  //construtor
     void run();         //função a ser executada pela thread
     void setVelocidade(int);
     int getMaxVelocidade();
+    void teste(int);
+    void enter_rc(int);
+    void out_rc(int);
 
 //Cria um sinal
 signals:
@@ -28,6 +31,9 @@ private:
    int ID;          //ID do trem
    int velocidade;  //Velocidade. É o tempo de dormir em milisegundos entre a mudança de posição do trem
    int maxVelocidade;
+   sem_t * s;
+   sem_t * mutex;
+   int * estado;
 };
 
 #endif // TREM_H

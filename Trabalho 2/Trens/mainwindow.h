@@ -31,6 +31,8 @@ private slots:
     void on_slider4_sliderMoved(int position);
     void on_slider5_sliderMoved(int position);
 
+    void on_MainWindow_destroyed();
+
 private:
     Ui::MainWindow *ui;
 

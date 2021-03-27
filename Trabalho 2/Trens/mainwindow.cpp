@@ -1,18 +1,36 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "semaphore.h"
+
+#define N 7
+
+#define DISPONIVEL 0
+
+sem_t s[N];     //Um semaforo por regiao critica
+sem_t mutex;
+int estado[N];  //Estados das regioes criticas
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    //Inicializar os semaforos
+
+    for(int i=0; i < N; i++){
+        sem_init(&s[i], 0, 1);
+        estado[i] = DISPONIVEL;     // Adiciona instancias aos estados
+    }
+
+    sem_init(&mutex, 0, 1);
 
     //Cria o trem com seu (ID, posição X, posição Y)
-    trem1 = new Trem(1,60,90,(ui->slider1->maximum() - ui->slider1->value()), ui->slider1->maximum());
-    trem2 = new Trem(2,460,30,(ui->slider2->maximum() - ui->slider2->value()), ui->slider2->maximum());
-    trem3 = new Trem(3,870,90,(ui->slider3->maximum() - ui->slider3->value()), ui->slider3->maximum());
-    trem4 = new Trem(4,330,270,(ui->slider4->maximum() - ui->slider4->value()), ui->slider4->maximum());
-    trem5 = new Trem(5,600,270,(ui->slider5->maximum() - ui->slider5->value()), ui->slider5->maximum());
+    trem1 = new Trem(1,60,90,(ui->slider1->maximum() - ui->slider1->value()), ui->slider1->maximum(), s, &mutex, estado);
+    trem2 = new Trem(2,460,30,(ui->slider2->maximum() - ui->slider2->value()), ui->slider2->maximum(), s, &mutex, estado);
+    trem3 = new Trem(3,870,90,(ui->slider3->maximum() - ui->slider3->value()), ui->slider3->maximum(), s, &mutex, estado);
+    trem4 = new Trem(4,330,270,(ui->slider4->maximum() - ui->slider4->value()), ui->slider4->maximum(), s, &mutex, estado);
+    trem5 = new Trem(5,600,270,(ui->slider5->maximum() - ui->slider5->value()), ui->slider5->maximum(), s, &mutex, estado);
 
     /*
      * Conecta o sinal UPDATEGUI à função UPDATEINTERFACE.
@@ -105,4 +123,12 @@ void MainWindow::on_slider5_sliderMoved(int position)
 {
     int max = trem5->getMaxVelocidade();
     trem5->setVelocidade(max - position);
+}
+
+void MainWindow::on_MainWindow_destroyed()
+{
+    for(int i=0; i < N; i++){
+        sem_destroy(&s[i]);
+    }
+    sem_destroy(&mutex);
 }
