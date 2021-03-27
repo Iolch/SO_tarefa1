@@ -22,7 +22,7 @@ Trem::Trem(int ID, int x, int y, int velocidade, int maxVelocidade){
     this->y = y;
     this->velocidade = velocidade;
     this->maxVelocidade = maxVelocidade;
-    estado[ID] = CIRCULANDO;
+    estado[ID-1] = CIRCULANDO;
 }
 void Trem::setVelocidade(int velocidade){
     this->velocidade = velocidade;
@@ -34,31 +34,31 @@ int Trem::move(int a, int b){
     // Tenta se mover, só consegue se mover não vá entrar em uma região critica em que está ocupada.
     // a e b representam as coordenadas x e y.
 
-    if(a == 330 && (b>=30 && b<=167)){
+    if(a == 330 && (b>=30 && b<=150)){
         // Regiao Critica 1
         return 1;
     }
-    if(a == 600 && (b>=30 && b<=167)){
+    if(a == 600 && (b>=30 && b<=150)){
         // Regiao Critica 2
         return 2;
     }
-    if((a>=200 && a<=351) && b==80){
+    if((a>=200 && a<=330) && b==150){
         // Regiao Critica 3
         return 3;
     }
-    if((a>=330 && a<=491) && b==80){
+    if((a>=330 && a<=470) && b==150){
         // Regiao Critica 4
         return 4;
     }
-    if((a>=470 && a<=621) && b==80){
+    if((a>=470 && a<=600) && b==150){
         // Regiao Critica 5
         return 5;
     }
-    if((a>=600 && a<=761) && b==80){
+    if((a>=600 && a<=740) && b==150){
         // Regiao Critica 6
         return 6;
     }
-    if(a == 470 && (b>=150 && b<=287)){
+    if(a == 470 && (b>=150 && b<=270)){
         // Regiao Critica 7
         return 7;
     }
@@ -68,16 +68,27 @@ int Trem::move(int a, int b){
 
 void lockUnlockRoads(int i, int rcritica){
     if(rcritica != -1) {
-        if((estado[i] == CCIRCULANDO && regiao[i] != rcritica) || estado[i] == CIRCULANDO){
+        if((estado[i] == CCIRCULANDO && regiao[i] != rcritica) || estado[i] == CIRCULANDO){ // Caso o trem esteja entrando uma nova rcritica
+
+            if(regiao[i] != 0){     // Se a regiao que ele estava ainda nao foi fechada
+                 s[regiao[i]-1].unlock();
+                 printf("Trem %d loca %d\n", i+1, regiao[i]);
+                 regiao[i] = 0;
+            }
+
             s[rcritica-1].lock();
             estado[i] = CCIRCULANDO;
             regiao[i] = rcritica;
+            printf("Trem %d loca %d\n", i+1, rcritica);
         }
+
     }else{
-        if(estado[i]==CCIRCULANDO){
+        if(estado[i]==CCIRCULANDO){ //Se ele tava CCirculando, mas agora sai desse estado
             estado[i] = CIRCULANDO;
+            s[regiao[i]-1].unlock();
+
+            printf("Trem %d unloca %d\n", i+1, regiao[i]);
             regiao[i] = 0;
-            s[rcritica-1].unlock();
         }
     }
 }
