@@ -13,13 +13,13 @@
 class Trem: public QThread{
  Q_OBJECT
 public:
-    Trem(int,int,int,int,int,sem_t*,sem_t*, int *);  //construtor
+    Trem(int,int,int,int,int,sem_t*,sem_t*,int*,int*);  //construtor
     void run();         //função a ser executada pela thread
     void setVelocidade(int);
     int getMaxVelocidade();
-    void teste(int);
-    void enter_rc(int);
-    void out_rc(int);
+    void enter_rc(int,int);
+    void in_rc(int,int);
+    void out_rc(int,int);
 
 //Cria um sinal
 signals:
@@ -33,7 +33,8 @@ private:
    int maxVelocidade;
    sem_t * s;
    sem_t * mutex;
-   int * estado;
+   int * estado_rc;
+   int * trem_rc;
 };
 
 #endif // TREM_H
