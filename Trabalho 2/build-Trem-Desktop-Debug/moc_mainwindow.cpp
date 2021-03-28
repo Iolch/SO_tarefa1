@@ -106,7 +106,6 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 5: _t->on_slider3_sliderMoved((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 6: _t->on_slider4_sliderMoved((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 7: _t->on_slider5_sliderMoved((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 8: _t->on_MainWindow_destroyed(); break;
         default: ;
         }
     }
