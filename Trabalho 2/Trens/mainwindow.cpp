@@ -8,42 +8,30 @@
 #define DISPONIVEL 0
 
 sem_t s[N];         // Um semáforo para cada região crítica.
-sem_t mutex;        // Mutex.
 int estado_rc[N];   // Estados das regiões críticas.
 int trem_rc[Q];     // Região crítica que o trem está passando.
-
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
 
     ui->setupUi(this);
 
-    // Inicializa semáforos, mutex e arrays de estados.
     for(int i=0; i < N; i++){
         sem_init(&s[i], 0, 1);
         estado_rc[i] = DISPONIVEL;
         if(i < Q) trem_rc[i] = -1;
     }
-    sem_init(&mutex, 0, 1);
 
-    //Cria os trens com seus respectivos valores.
-    trem1 = new Trem(1,60,90,(ui->slider1->maximum() - ui->slider1->value()), ui->slider1->maximum(), s, &mutex, estado_rc, trem_rc);
-    trem2 = new Trem(2,470,30,(ui->slider2->maximum() - ui->slider2->value()), ui->slider2->maximum(), s, &mutex, estado_rc, trem_rc);
-    trem3 = new Trem(3,870,90,(ui->slider3->maximum() - ui->slider3->value()), ui->slider3->maximum(), s, &mutex, estado_rc, trem_rc);
-    trem4 = new Trem(4,330,270,(ui->slider4->maximum() - ui->slider4->value()), ui->slider4->maximum(), s, &mutex, estado_rc, trem_rc);
-    trem5 = new Trem(5,600,270,(ui->slider5->maximum() - ui->slider5->value()), ui->slider5->maximum(), s, &mutex, estado_rc, trem_rc);
+    trem1 = new Trem(1, 60, 90, (ui->slider1->maximum()-ui->slider1->value()), ui->slider1->maximum(), s, estado_rc, trem_rc);
+    trem2 = new Trem(2, 470, 30, (ui->slider2->maximum()-ui->slider2->value()), ui->slider2->maximum(), s, estado_rc, trem_rc);
+    trem3 = new Trem(3, 870, 90, (ui->slider3->maximum()-ui->slider3->value()), ui->slider3->maximum(), s, estado_rc, trem_rc);
+    trem4 = new Trem(4, 330, 270, (ui->slider4->maximum()-ui->slider4->value()), ui->slider4->maximum(), s, estado_rc, trem_rc);
+    trem5 = new Trem(5, 600, 270, (ui->slider5->maximum()-ui->slider5->value()), ui->slider5->maximum(), s, estado_rc, trem_rc);
 
-    /*
-     * Conecta o sinal UPDATEGUI à função UPDATEINTERFACE.
-     * Ou seja, sempre que o sinal UPDATEGUI foi chamado, será executada a função UPDATEINTERFACE.
-     * Os 3 parâmetros INT do sinal serão utilizados na função.
-     * Trem1 e Trem2 são os objetos que podem chamar o sinal. Se um outro objeto chamar o
-     * sinal UPDATEGUI, não haverá execução da função UPDATEINTERFACE
-     */
-    connect(trem1,SIGNAL(updateGUI(int,int,int)),SLOT(updateInterface(int,int,int)));
-    connect(trem2,SIGNAL(updateGUI(int,int,int)),SLOT(updateInterface(int,int,int)));
-    connect(trem3,SIGNAL(updateGUI(int,int,int)),SLOT(updateInterface(int,int,int)));
-    connect(trem4,SIGNAL(updateGUI(int,int,int)),SLOT(updateInterface(int,int,int)));
-    connect(trem5,SIGNAL(updateGUI(int,int,int)),SLOT(updateInterface(int,int,int)));
+    connect(trem1, SIGNAL(updateGUI(int,int,int)), SLOT(updateInterface(int,int,int)));
+    connect(trem2, SIGNAL(updateGUI(int,int,int)), SLOT(updateInterface(int,int,int)));
+    connect(trem3, SIGNAL(updateGUI(int,int,int)), SLOT(updateInterface(int,int,int)));
+    connect(trem4, SIGNAL(updateGUI(int,int,int)), SLOT(updateInterface(int,int,int)));
+    connect(trem5, SIGNAL(updateGUI(int,int,int)), SLOT(updateInterface(int,int,int)));
 
 }
 
@@ -71,11 +59,10 @@ void MainWindow::updateInterface(int id, int x, int y){
 }
 
 MainWindow::~MainWindow() {
-    delete ui;
     for(int i=0; i < N; i++){
         sem_destroy(&s[i]);
     }
-    sem_destroy(&mutex);
+    delete ui;
 }
 
 // Ao clicar, trens começam execução.

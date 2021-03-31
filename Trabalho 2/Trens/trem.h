@@ -1,5 +1,6 @@
 #ifndef TREM_H
 #define TREM_H
+
 #include "semaphore.h"
 #include <QThread>
 
@@ -10,31 +11,31 @@
  * Para parar a execução da função RUN da thread, basta executar a função TERMINATE.
  *
 */
-class Trem: public QThread{
- Q_OBJECT
-public:
-    Trem(int,int,int,int,int,sem_t*,sem_t*,int*,int*);  //construtor
-    void run();         //função a ser executada pela thread
-    void setVelocidade(int);
-    int getMaxVelocidade();
-    void enter_rc(int,int);
-    void in_rc(int,int);
-    void out_rc(int,int);
+class Trem: public QThread {
 
-//Cria um sinal
-signals:
-    void updateGUI(int,int,int);
+    Q_OBJECT
 
-private:
-   int x;           //posição X do trem na tela
-   int y;           //posição Y do trem na tela
-   int ID;          //ID do trem
-   int velocidade;  //Velocidade. É o tempo de dormir em milisegundos entre a mudança de posição do trem
-   int maxVelocidade;
-   sem_t * s;
-   sem_t * mutex;
-   int * estado_rc;
-   int * trem_rc;
+    public:
+        Trem(int, int, int, int, int, sem_t*, int*, int*); //construtor
+        void run(); // função a ser executada pela thread
+        void enter_rc(int); // função que gerencia a entrada de um trem na região crítica.
+        void in_rc(int); // função que aloca uma região crítica para um trem.
+        void out_rc(int); // função que gerencia a saída de um trem da região crítica.
+        void setVelocidade(int);
+        int getMaxVelocidade();
+
+    signals:
+        void updateGUI(int,int,int);
+
+    private:
+       int x;
+       int y;
+       int ID;
+       int velocidade;
+       int maxVelocidade;
+       sem_t * s;
+       int * estado_rc;
+       int * trem_rc;
 };
 
 #endif // TREM_H
