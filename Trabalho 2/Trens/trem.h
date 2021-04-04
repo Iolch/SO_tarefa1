@@ -13,7 +13,7 @@
 class Trem: public QThread{
  Q_OBJECT
 public:
-    Trem(int,int,int,int,int,sem_t*,sem_t*,int*,int*);  //construtor
+    Trem(int,int,int,int,int,sem_t*,sem_t*,sem_t*,int*,int*);  //construtor
     void run();         //função a ser executada pela thread
     void setVelocidade(int);
     int getMaxVelocidade();
@@ -32,6 +32,7 @@ private:
    int velocidade;  //Velocidade. É o tempo de dormir em milisegundos entre a mudança de posição do trem
    int maxVelocidade;
    sem_t * s;
+   sem_t * cross;
    sem_t * mutex;
    int * estado_rc;
    int * trem_rc;

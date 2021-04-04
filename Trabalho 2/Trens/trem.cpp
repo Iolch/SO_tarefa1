@@ -17,13 +17,14 @@
 #define DISPONIVEL 0
 
 //Construtor
-Trem::Trem(int ID, int x, int y, int velocidade, int maxVelocidade, sem_t * s, sem_t * mutex, int * estado_rc, int * trem_rc){
+Trem::Trem(int ID, int x, int y, int velocidade, int maxVelocidade, sem_t * s, sem_t * cross, sem_t * mutex, int * estado_rc, int * trem_rc){
     this->ID = ID;
     this->x = x;
     this->y = y;
     this->velocidade = velocidade;
     this->maxVelocidade = maxVelocidade;
     this->s = s;
+    this->cross = cross;
     this->mutex = mutex;
     this->estado_rc = estado_rc;
     this->trem_rc = trem_rc;
@@ -45,106 +46,125 @@ void Trem::in_rc(int rc, int trem_id){
 
 void Trem::enter_rc(int rc, int trem_id){
 
-    if(trem_id==AZUL && rc==1){
-        if((estado_rc[2]==OCUPADO) && (estado_rc[3]==OCUPADO)){
-            sem_wait(&s[2]);
-            sem_post(&s[2]);
-        }
-    }
-    else if(trem_id==VERMELHO && rc==2){
-        if(estado_rc[4]==OCUPADO && estado_rc[5]==OCUPADO){
-            sem_wait(&s[4]);
-            sem_post(&s[4]);
-        }
-    }
-    else if(trem_id==VERDE && rc==6){
-        if(estado_rc[1]==OCUPADO && estado_rc[4]==OCUPADO){
-            sem_wait(&s[1]);
-            sem_post(&s[1]);
-        }
-    }
-    else if(trem_id==ROXO && rc==3){
-        if(estado_rc[0]==OCUPADO && estado_rc[3]==OCUPADO){
-            sem_wait(&s[0]);
-            sem_post(&s[0]);
-        }
-    }
-    else if(trem_id==LARANJA && rc==7){
-        if(estado_rc[3]==OCUPADO && estado_rc[4]==OCUPADO){
-            sem_wait(&s[4]);
-            sem_post(&s[4]);
-        }
-    }
+    if(rc == 4) sem_wait(&cross[0]);
+    if(rc == 5) sem_wait(&cross[1]);
 
-    in_rc(rc, trem_id);
-}
-
-void Trem::out_rc(int rc, int trem_id){
-
-    if(estado_rc[i] == OCUPADO && trem_rc[t] == rc){
-        if(trem_id == AZUL){
-            if(rc==1 && estado_rc[2] == OCUPADO){
-                sem_wait(&s[2]);
-                sem_post(&s[2]);
-            }
-        }
-        else if(trem_id == VERMELHO){
-            if(rc == 2 && estado_rc[4] == OCUPADO){
-                sem_wait(&s[4]);
-                sem_post(&s[4]);
-            }
-            else if(rc == 5){
-                if(estado_rc[0]==OCUPADO && estado_rc[2]==OCUPADO){
-                    sem_wait(&s[2]);
-                    sem_post(&s[2]);
-                }
-                if(estado_rc[3] == OCUPADO){
-                    sem_wait(&s[3]);
-                    sem_post(&s[3]);
-                }
-            }
-            else if(rc == 4 && estado_rc[0] == OCUPADO){
-                sem_wait(&s[0]);
-                sem_post(&s[0]);
-            }
-        }
-        else if(trem_id == VERDE){
-            if(rc == 6 && estado_rc[1] == OCUPADO){
-                sem_wait(&s[1]);
-                sem_post(&s[1]);
-            }
-        }
-        else if(trem_id == ROXO){
-            if(rc == 3 && estado_rc[3] == OCUPADO){
+    if(ID==AZUL){
+        if(rc == 1){
+            if(trem_rc[VERMELHO-1]==4 && trem_rc[ROXO-1]==3){
                 sem_wait(&s[3]);
                 sem_post(&s[3]);
             }
-            else if(rc == 4 && estado_rc[6] == OCUPADO){
-                sem_wait(&s[6]);
-                sem_post(&s[6]);
-            }
         }
-        else if(trem_id == LARANJA){
-            if(rc == 7){
-                if(estado_rc[1] == OCUPADO && estado_rc[5] == OCUPADO){
-                    sem_wait(&s[4]);
-                    sem_post(&s[4]);
-                }
-                if(estado_rc[4] == OCUPADO){
-                    sem_wait(&s[4]);
-                    sem_post(&s[4]);
-                }
+    }else if(ID == VERMELHO){
+        if(rc == 2){
+            if(trem_rc[LARANJA-1]==5 && trem_rc[VERDE-1]==6){
+                sem_wait(&s[5]);
+                sem_post(&s[5]);
             }
-            else if(rc == 5 && estado_rc[5] == OCUPADO){
+            if(trem_rc[VERDE-1]==6 && trem_rc[LARANJA-1]==7 && trem_rc[ROXO-1]==3){
                 sem_wait(&s[5]);
                 sem_post(&s[5]);
             }
         }
+    }else if(ID == VERDE){
+        if(rc == 6){
+            if(trem_rc[VERMELHO-1]==2 && trem_rc[LARANJA-1]==5){
+                sem_wait(&s[1]);
+                sem_post(&s[1]);
+            }
+        }
+    }else if(ID == ROXO){
+        if(rc == 3){
+            if(trem_rc[AZUL-1]==1 && trem_rc[VERMELHO-1]==4){
+                sem_wait(&s[0]);
+                sem_post(&s[0]);
+            }
+            if(trem_rc[LARANJA-1]==7 && trem_rc[VERMELHO-1]==5){
+                sem_wait(&s[6]);
+                sem_post(&s[6]);
+            }
+        }
+    }else if(ID == LARANJA){
+        if(rc == 7){
+            if(trem_rc[ROXO-1]==4){
+                sem_wait(&s[3]);
+                sem_post(&s[3]);
+            }
+        }
+    }
+    in_rc(rc, trem_id);
+}
 
+void Trem::out_rc(int rc, int trem_id){
+     if(estado_rc[i] == OCUPADO && trem_rc[t] == rc){
+//        if(ID == AZUL){
+//             if(rc==1 && estado_rc[2] == OCUPADO){
+//                 sem_wait(&s[2]);
+//                 sem_post(&s[2]);
+//             }
+//        }else if(ID == VERMELHO){
+//            if(rc==2){
+//                if(trem_rc[LARANJA-1]==7 && trem_rc[ROXO-1]==4){
+//                    sem_wait(&s[6]);
+//                    sem_post(&s[6]);
+//                }else if(trem_rc[AZUL-1]==1 && trem_rc[ROXO-1]==3 && trem_rc[LARANJA-1]==7){
+//                    sem_wait(&s[6]);
+//                    sem_post(&s[6]);
+//                }
+//            }
+//            if(rc==5){
+//                if(trem_rc[AZUL-1]==1 && trem_rc[ROXO-1]==3){
+//                    sem_wait(&s[0]);
+//                    sem_post(&s[0]);
+//                }
+//            }
+//            if(rc==4){
+//                if(trem_rc[AZUL-1]==1){
+//                    sem_wait(&s[0]);
+//                    sem_post(&s[0]);
+//                }
+//            }
+//        }else if(ID == VERDE){
+//            if(rc == 6){
+//                if(trem_rc[VERMELHO-1]==2){
+//                    sem_wait(&s[1]);
+//                    sem_post(&s[1]);
+//                }
+//            }
+//        }else if(ID == ROXO){
+//            if(rc == 3){
+//                if(trem_rc[LARANJA-1]==7 && trem_rc[VERMELHO-1]==5){
+//                    sem_wait(&s[6]);
+//                    sem_post(&s[6]);
+//                }
+//            }
+//            if(rc == 4){
+//                if(trem_rc[LARANJA-1]==7){
+//                    sem_wait(&s[6]);
+//                    sem_post(&s[6]);
+//                }
+//            }
+//        }else if(ID == LARANJA){
+//            if(rc == 7){
+//                if(trem_rc[VERMELHO-1]==2 && trem_rc[VERDE-1]==6){
+//                    sem_wait(&s[1]);
+//                    sem_post(&s[1]);
+//                }
+//            }
+//            if(rc == 5){
+//                if(trem_rc[VERDE-1]==6){
+//                    sem_wait(&s[5]);
+//                    sem_post(&s[5]);
+//                }
+//            }
+//        }
         estado_rc[i] = DISPONIVEL;
         trem_rc[t] = -1;
         sem_post(&s[i]);
-    }
+        if(rc==4) sem_post(&cross[0]);
+        if(rc==5) sem_post(&cross[1]);
+     }
 }
 
 void Trem::run(){

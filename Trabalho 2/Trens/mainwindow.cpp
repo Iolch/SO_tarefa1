@@ -9,6 +9,7 @@
 
 sem_t s[N];         // Um semáforo para cada região crítica.
 sem_t mutex;        // Mutex.
+sem_t cross[2];  // Um semáforo para cada região critica que passa mais de dois trens
 int estado_rc[N];   // Estados das regiões críticas.
 int trem_rc[Q];     // Região crítica que o trem está passando.
 
@@ -16,6 +17,8 @@ int trem_rc[Q];     // Região crítica que o trem está passando.
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
 
     ui->setupUi(this);
+    sem_init(&cross[0], 0, 2);
+    sem_init(&cross[1], 0, 2);
 
     // Inicializa semáforos, mutex e arrays de estados.
     for(int i=0; i < N; i++){
@@ -26,11 +29,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     sem_init(&mutex, 0, 1);
 
     //Cria os trens com seus respectivos valores.
-    trem1 = new Trem(1,60,90,(ui->slider1->maximum() - ui->slider1->value()), ui->slider1->maximum(), s, &mutex, estado_rc, trem_rc);
-    trem2 = new Trem(2,470,30,(ui->slider2->maximum() - ui->slider2->value()), ui->slider2->maximum(), s, &mutex, estado_rc, trem_rc);
-    trem3 = new Trem(3,870,90,(ui->slider3->maximum() - ui->slider3->value()), ui->slider3->maximum(), s, &mutex, estado_rc, trem_rc);
-    trem4 = new Trem(4,330,270,(ui->slider4->maximum() - ui->slider4->value()), ui->slider4->maximum(), s, &mutex, estado_rc, trem_rc);
-    trem5 = new Trem(5,600,270,(ui->slider5->maximum() - ui->slider5->value()), ui->slider5->maximum(), s, &mutex, estado_rc, trem_rc);
+    trem1 = new Trem(1,60,90,(ui->slider1->maximum() - ui->slider1->value()), ui->slider1->maximum(), s, cross, &mutex, estado_rc, trem_rc);
+    trem2 = new Trem(2,470,30,(ui->slider2->maximum() - ui->slider2->value()), ui->slider2->maximum(), s, cross, &mutex, estado_rc, trem_rc);
+    trem3 = new Trem(3,870,90,(ui->slider3->maximum() - ui->slider3->value()), ui->slider3->maximum(), s, cross, &mutex, estado_rc, trem_rc);
+    trem4 = new Trem(4,330,270,(ui->slider4->maximum() - ui->slider4->value()), ui->slider4->maximum(), s, cross, &mutex, estado_rc, trem_rc);
+    trem5 = new Trem(5,600,270,(ui->slider5->maximum() - ui->slider5->value()), ui->slider5->maximum(), s, cross, &mutex, estado_rc, trem_rc);
 
     /*
      * Conecta o sinal UPDATEGUI à função UPDATEINTERFACE.
@@ -75,6 +78,8 @@ MainWindow::~MainWindow() {
     for(int i=0; i < N; i++){
         sem_destroy(&s[i]);
     }
+    sem_destroy(&cross[0]);
+    sem_destroy(&cross[1]);
     sem_destroy(&mutex);
 }
 
